@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newslouds.com | Daily Automated News</title>
+    <style>
+        /* Base Styling */
+        :root {
+            --primary-color: #e63946;
+            --text-dark: #1d3557;
+            --text-light: #f1faee;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
+
+        /* Header Navigation */
+        header {
+            background-color: var(--text-dark);
+            color: var(--text-light);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 { color: var(--primary-color); font-size: 1.8rem; }
+        nav ul { list-style: none; display: flex; gap: 1.5rem; }
+        nav a { color: var(--text-light); text-decoration: none; font-weight: 500; text-transform: capitalize; }
+        nav a:hover { color: var(--primary-color); }
+
+        /* Main Layout */
+        .container { width: 95%; max-width: 1200px; margin: 2rem auto; }
+        .category-section { margin-bottom: 3rem; }
+        .category-section h2 { 
+            border-bottom: 3px solid var(--primary-color); 
+            display: inline-block; 
+            margin-bottom: 1.5rem; 
+            text-transform: capitalize;
+        }
+
+        /* Article Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .article-source { color: var(--primary-color); font-size: 0.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .article-title { font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.3; }
+        .article-title a { color: var(--text-dark); text-decoration: none; }
+        .article-title a:hover { color: var(--primary-color); }
+        .article-date { font-size: 0.85rem; color: #777; margin-top: auto; }
+
+        /* Loading State */
+        .loading { text-align: center; padding: 2rem; color: #555; font-style: italic; }
+
+        footer { background-color: var(--text-dark); color: var(--text-light); text-align: center; padding: 2rem; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Newslouds</h1>
+        <nav>
+            <ul>
+                <li><a href="#sport">Sport</a></li>
+                <li><a href="#celebrity">Celebrity</a></li>
+                <li><a href="#economic">Economic</a></li>
+                <li><a href="#automotive">Automotive</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container" id="main-content">
+        </div>
+
+    <footer>
+        <p>&copy; 2026 Newslouds.com. Live updates powered by Google News.</p>
+    </footer>
+
+    <script>
+        // The categories you requested
+        const categories = ['sport', 'celebrity', 'economic', 'automotive'];
+        const mainContent = document.getElementById('main-content');
+
+        // This function fetches live news from Google News RSS using a free proxy to bypass browser security restrictions
+        async function fetchNews(category) {
+            // Google News RSS URL for the specific category
+            const rssUrl = `https://news.google.com/rss/search?q=${category}&hl=en-US&gl=US&ceid=US:en`;
+            // We use rss2json API to convert the messy RSS feed into clean data we can use
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                // Return only the top 4 articles per category to keep it fast and clean
+                return data.items.slice(0, 4); 
+            } catch (error) {
+                console.error(`Error fetching ${category} news:`, error);
+                return [];
+            }
+        }
+
+        // Function to build the HTML for the page automatically
+        async function buildPage() {
+            for (const category of categories) {
+                // 1. Create a section for the category
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                section.id = category;
+                section.innerHTML = `<h2>${category} News</h2><div class="news-grid loading" id="grid-${category}">Fetching latest headlines...</div>`;
+                mainContent.appendChild(section);
+
+                // 2. Fetch the live news
+                const articles = await fetchNews(category);
+                const grid = document.getElementById(`grid-${category}`);
+                grid.classList.remove('loading');
+                grid.innerHTML = ''; // Clear loading text
+
+                // 3. Populate the articles
+                if (articles.length === 0) {
+                    grid.innerHTML = '<p>Unable to load news at this time.</p>';
+                    continue;
+                }
+
+                articles.forEach(article => {
+                    // Format the date nicely
+                    const date = new Date(article.pubDate).toLocaleDateString();
+                    
+                    const card = document.createElement('article');
+                    card.className = 'article-card';
+                    card.innerHTML = `
+                        <span class="article-source">Source: Google News</span>
+                        <h3 class="article-title"><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                        <p class="article-date">Published: ${date}</p>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // Start the engine!
+        buildPage();
+    </script>
+</body>
+</html>

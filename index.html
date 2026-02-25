@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newslouds.com | Berita Otomatis Harian</title>
+    <title>Newslouds.com | Update Daily </title>
     
-    <meta name="description" content="Newslouds.com menyajikan berita otomatis harian seputar Olahraga, Selebriti, Ekonomi, dan Otomotif.">
+    <meta name="description" content="Newslouds.com daily update world news .">
     <link rel="canonical" href="https://newslouds-com.vercel.app/">
 
     <style>
@@ -107,7 +107,7 @@
         async function fetchNews(category) {
             // Menggunakan proxy rss2json dengan parameter cache harian untuk menghindari rate limit
             const rssUrl = `https://news.google.com/rss/search?q=${category}+news&hl=id&gl=ID&ceid=ID:id`;
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&api_key=YOUR_FREE_API_KEY_HERE`; 
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&api_key=smjbqyboewxluaxmoafbxokpg3kzghc5kq0sc3iu`; 
             
             try {
                 const res = await fetch(apiUrl);

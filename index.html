@@ -3,102 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newslouds | Search Jobs</title>
+    <title>Newslouds | Find Your Next Job</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
-<body class="bg-gray-50">
-
-    <nav class="bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="text-2xl font-bold text-blue-600 tracking-tight">newslouds<span class="text-gray-900">.com</span></div>
-        <div class="hidden md:flex space-x-6 font-medium text-gray-600">
-            <a href="#" class="hover:text-blue-600">Search Jobs</a>
-            <a href="#" class="hover:text-blue-600">Post a Job</a>
-        </div>
+<body class="bg-slate-50 font-sans">
+    <nav class="bg-white border-b py-4 px-8 flex justify-between items-center sticky top-0 z-50">
+        <div class="text-2xl font-black text-blue-600">newslouds<span class="text-slate-800">.com</span></div>
     </nav>
 
-    <div class="bg-white border-b py-12 px-4">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-8 text-gray-900">The easiest way to find a job.</h1>
-            
-            <div class="flex flex-col md:flex-row shadow-xl rounded-xl border overflow-hidden">
-                <input id="keywords" type="text" placeholder="Job Title or Keywords" class="flex-1 p-5 outline-none border-b md:border-b-0 md:border-r border-gray-200 text-lg">
-                <input id="location" type="text" placeholder="City or Country" class="flex-1 p-5 outline-none text-lg">
-                <button onclick="searchJobs()" class="bg-green-500 hover:bg-green-600 text-white px-10 py-5 font-bold text-xl transition-all">Search Jobs</button>
+    <div class="bg-white border-b py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-8 leading-tight">Search millions of jobs <br><span class="text-blue-600">all in one place.</span></h1>
+            <div class="flex flex-col md:flex-row shadow-2xl rounded-2xl border-4 border-white overflow-hidden bg-white">
+                <input id="q" type="text" placeholder="Job Title, Skills" class="flex-1 p-5 outline-none border-b md:border-b-0 md:border-r border-slate-100 text-lg">
+                <input id="l" type="text" placeholder="Location (e.g. Dublin)" class="flex-1 p-5 outline-none text-lg">
+                <button onclick="doSearch()" class="bg-green-500 hover:bg-green-600 text-white px-10 py-5 font-bold text-xl transition">Search Now</button>
             </div>
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto py-10 px-4">
-        <div id="loading" class="hidden text-center text-gray-500 py-10">Searching for jobs...</div>
+    <div class="max-w-4xl mx-auto py-12 px-4">
         <div id="results" class="space-y-4">
-            <div class="text-center py-20">
-                <p class="text-gray-400">Enter a job title and location to start searching.</p>
-            </div>
+            <div class="text-center text-slate-400 py-10">Start your search above to see jobs in Ireland.</div>
         </div>
     </div>
 
     <script>
-        const API_KEY = '5fd36959d3ebed46321c9cf628926597';
+        async function doSearch() {
+            const q = document.getElementById('q').value;
+            const l = document.getElementById('l').value;
+            const container = document.getElementById('results');
 
-        async function searchJobs() {
-            const keywords = document.getElementById('keywords').value;
-            const location = document.getElementById('location').value;
-            const resultsDiv = document.getElementById('results');
-            const loading = document.getElementById('loading');
-
-            if(!keywords) { alert("Please enter a job title"); return; }
-
-            loading.classList.remove('hidden');
-            resultsDiv.innerHTML = '';
-
-            // Using a CORS proxy to allow the browser to talk to Careerjet
-            const proxy = "https://cors-anywhere.herokuapp.com/"; 
-            const url = `https://search.api.careerjet.net/v4/query?affid=${API_KEY}&keywords=${keywords}&location=${location}&user_ip=1.1.1.1&user_agent=Mozilla&locale_code=en_IE`;
+            container.innerHTML = '<div class="text-center py-10 text-blue-600 font-bold">Searching...</div>';
 
             try {
-                // Note: If this fails, you may need to visit https://cors-anywhere.herokuapp.com/corsdemo to unlock the proxy
-                const response = await fetch(proxy + url);
+                // This calls your SECURE Vercel function
+                const response = await fetch(`/api/search?q=${q}&l=${l}`);
                 const data = await response.json();
-                
-                loading.classList.add('hidden');
-                displayJobs(data.jobs);
-            } catch (error) {
-                loading.classList.add('hidden');
-                resultsDiv.innerHTML = `<p class="text-red-500 text-center">Error connecting to API. You might need to enable the CORS proxy.</p>`;
-            }
-        }
 
-        function displayJobs(jobs) {
-            const resultsDiv = document.getElementById('results');
-            if(!jobs || jobs.length === 0) {
-                resultsDiv.innerHTML = '<p class="text-center">No jobs found. Try different keywords.</p>';
-                return;
-            }
+                if (!data.jobs || data.jobs.length === 0) {
+                    container.innerHTML = '<p class="text-center py-10">No jobs found. Try different keywords.</p>';
+                    return;
+                }
 
-            resultsDiv.innerHTML = jobs.map(job => `
-                <div class="bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group">
-                    <div class="flex justify-between items-start">
-                        <div class="flex-1">
-                            <h3 class="text-xl font-bold text-blue-600 group-hover:underline"><a href="${job.url}" target="_blank">${job.title}</a></h3>
-                            <p class="text-gray-900 font-semibold mt-1">${job.company}</p>
-                            <p class="text-gray-500 text-sm flex items-center mt-1">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"></path></svg>
-                                ${job.locations}
-                            </p>
+                container.innerHTML = data.jobs.map(job => `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-xl transition-all">
+                        <div class="flex justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-blue-600 underline cursor-pointer"><a href="${job.url}" target="_blank">${job.title}</a></h3>
+                                <p class="font-bold text-slate-700 mt-1">${job.company}</p>
+                                <p class="text-slate-500 text-sm mt-1">📍 ${job.locations}</p>
+                            </div>
+                            <a href="${job.url}" target="_blank" class="hidden md:block bg-slate-100 text-slate-700 px-5 py-2 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition h-fit">Apply</a>
                         </div>
-                        <a href="${job.url}" target="_blank" class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-600 hover:text-white transition">View Job</a>
+                        <div class="mt-4 text-slate-600 text-sm line-clamp-2">${job.description}</div>
+                        <div class="mt-4 text-xs text-slate-400 font-medium">${job.date}</div>
                     </div>
-                    <div class="mt-4 text-gray-600 text-sm line-clamp-3">
-                        ${job.description}
-                    </div>
-                    <div class="mt-4 pt-4 border-t text-xs text-gray-400 flex justify-between">
-                        <span>Posted: ${job.date}</span>
-                        <span>via Careerjet</span>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<p class="text-red-500 text-center">Something went wrong. Please try again.</p>';
+            }
         }
     </script>
 </body>

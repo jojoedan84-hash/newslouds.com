@@ -1,174 +1,105 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newslouds.com | Update Daily </title>
-    
-    <meta name="description" content="Newslouds.com daily update world news .">
-    <link rel="canonical" href="https://newslouds-com.vercel.app/">
-
-    <style>
-        :root {
-            --primary: #e63946;
-            --dark: #1d3557;
-            --light: #f1faee;
-            --bg: #f8f9fa;
-            --white: #ffffff;
-            --text: #1d3557;
-        }
-        body.dark-mode {
-            --bg: #121212; --white: #1e1e1e; --text: #f1faee; --light: #1d3557;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; scroll-behavior: smooth; }
-
-        header {
-            background: var(--dark); color: var(--light); padding: 1rem 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 9999; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        /* Judul Newslouds sekarang bisa diklik */
-        header h1 a { color: var(--primary); text-decoration: none; font-size: 1.8rem; cursor: pointer; }
-
-        .header-tools { display: flex; align-items: center; gap: 1rem; }
-        nav ul { list-style: none; display: flex; gap: 15px; }
-        nav a { color: var(--light); text-decoration: none; font-size: 0.9rem; font-weight: bold; }
-        nav a:hover { color: var(--primary); }
-
-        .container { width: 95%; max-width: 1200px; margin: 2rem auto; min-height: 70vh; }
-        .category-section { margin-bottom: 3rem; scroll-margin-top: 100px; }
-        
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        
-        .article-card { 
-            background: var(--white); border-radius: 12px; overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; transition: 0.3s;
-        }
-        .article-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        
-        .article-thumb { width: 100%; height: 160px; object-fit: cover; background-color: #ddd; }
-        .article-body { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
-        .article-title { font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0; }
-        .article-title a { color: var(--text); text-decoration: none; }
-        .article-date { font-size: 0.8rem; color: #777; margin-top: auto; padding-top: 10px; }
-
-        .error-box { text-align: center; padding: 2rem; background: #ffe3e3; border-radius: 8px; color: #d00; margin: 1rem 0; }
-        .btn-reload { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-
-        footer { background: var(--dark); color: var(--light); padding: 3rem 5%; text-align: center; margin-top: 4rem; }
-        .footer-links { margin-top: 1rem; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .footer-links button { background: none; border: none; color: var(--light); cursor: pointer; text-decoration: underline; }
-
-        @media (max-width: 768px) { nav { display: none; } }
-    </style>
+    <title>Newslouds | Search Jobs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
-<body>
+<body class="bg-gray-50">
 
-    <header>
-        <h1><a href="/">Newslouds</a></h1>
-        <div class="header-tools">
-            <nav>
-                <ul>
-                    <li><a href="#sport">Sport</a></li>
-                    <li><a href="#celebrity">Celebrity</a></li>
-                    <li><a href="#economic">Economic</a></li>
-                    <li><a href="#automotive">Automotive</a></li>
-                </ul>
-            </nav>
-            <button onclick="document.body.classList.toggle('dark-mode')" style="cursor:pointer; padding:5px 10px; border-radius:5px; border:none; background:var(--primary); color:white;">Mode</button>
+    <nav class="bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="text-2xl font-bold text-blue-600 tracking-tight">newslouds<span class="text-gray-900">.com</span></div>
+        <div class="hidden md:flex space-x-6 font-medium text-gray-600">
+            <a href="#" class="hover:text-blue-600">Search Jobs</a>
+            <a href="#" class="hover:text-blue-600">Post a Job</a>
         </div>
-    </header>
+    </nav>
 
-    <main class="container" id="main-content">
-        <div id="loading-status" style="text-align: center; padding: 50px;">Memuat berita terbaru...</div>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Newslouds.com - Berita Harian Anda</p>
-        <div class="footer-links">
-            <button onclick="alert('Newslouds adalah aggregator berita otomatis.')">Tentang Kami</button>
-            <button onclick="alert('Email: admin@newslouds.com')">Kontak</button>
-            <button onclick="alert('Kami menghargai privasi Anda.')">Privasi</button>
+    <div class="bg-white border-b py-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-8 text-gray-900">The easiest way to find a job.</h1>
+            
+            <div class="flex flex-col md:flex-row shadow-xl rounded-xl border overflow-hidden">
+                <input id="keywords" type="text" placeholder="Job Title or Keywords" class="flex-1 p-5 outline-none border-b md:border-b-0 md:border-r border-gray-200 text-lg">
+                <input id="location" type="text" placeholder="City or Country" class="flex-1 p-5 outline-none text-lg">
+                <button onclick="searchJobs()" class="bg-green-500 hover:bg-green-600 text-white px-10 py-5 font-bold text-xl transition-all">Search Jobs</button>
+            </div>
         </div>
-    </footer>
+    </div>
+
+    <div class="max-w-4xl mx-auto py-10 px-4">
+        <div id="loading" class="hidden text-center text-gray-500 py-10">Searching for jobs...</div>
+        <div id="results" class="space-y-4">
+            <div class="text-center py-20">
+                <p class="text-gray-400">Enter a job title and location to start searching.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const categories = ['sport', 'celebrity', 'economic', 'automotive'];
-        const thumbMap = {
-            'sport': 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=400',
-            'celebrity': 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400',
-            'economic': 'https://images.unsplash.com/photo-1611974714658-058e13f0709a?w=400',
-            'automotive': 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400'
-        };
+        const API_KEY = '5fd36959d3ebed46321c9cf628926597';
 
-        async function fetchNews(category) {
-            // Menggunakan proxy rss2json dengan parameter cache harian untuk menghindari rate limit
-            const rssUrl = `https://news.google.com/rss/search?q=${category}+news&hl=id&gl=ID&ceid=ID:id`;
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&api_key=smjbqyboewxluaxmoafbxokpg3kzghc5kq0sc3iu`; 
-            
+        async function searchJobs() {
+            const keywords = document.getElementById('keywords').value;
+            const location = document.getElementById('location').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.getElementById('loading');
+
+            if(!keywords) { alert("Please enter a job title"); return; }
+
+            loading.classList.remove('hidden');
+            resultsDiv.innerHTML = '';
+
+            // Using a CORS proxy to allow the browser to talk to Careerjet
+            const proxy = "https://cors-anywhere.herokuapp.com/"; 
+            const url = `https://search.api.careerjet.net/v4/query?affid=${API_KEY}&keywords=${keywords}&location=${location}&user_ip=1.1.1.1&user_agent=Mozilla&locale_code=en_IE`;
+
             try {
-                const res = await fetch(apiUrl);
-                const data = await res.json();
-                if (data.status === 'ok') return data.items.slice(0, 6);
-                throw new Error('Limit tercapai');
-            } catch (e) {
-                console.error(e);
-                return null; // Mengembalikan null untuk menandakan error
-            }
-        }
-
-        async function init() {
-            const main = document.getElementById('main-content');
-            const loading = document.getElementById('loading-status');
-            
-            let hasError = false;
-
-            for (const cat of categories) {
-                const articles = await fetchNews(cat);
+                // Note: If this fails, you may need to visit https://cors-anywhere.herokuapp.com/corsdemo to unlock the proxy
+                const response = await fetch(proxy + url);
+                const data = await response.json();
                 
-                if (articles === null) {
-                    hasError = true;
-                    continue;
-                }
-
-                if (loading) loading.remove();
-
-                const sec = document.createElement('section');
-                sec.className = 'category-section';
-                sec.id = cat;
-                sec.innerHTML = `<h2 style="margin-bottom:1.5rem; text-transform:capitalize;">Berita ${cat}</h2><div class="news-grid" id="grid-${cat}"></div>`;
-                main.appendChild(sec);
-
-                const grid = document.getElementById(`grid-${cat}`);
-                articles.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'article-card';
-                    card.innerHTML = `
-                        <img src="${thumbMap[cat]}" class="article-thumb" alt="${cat}">
-                        <div class="article-body">
-                            <div style="font-size:0.7rem; color:var(--primary); font-weight:bold;">${item.source}</div>
-                            <h3 class="article-title"><a href="${item.link}" target="_blank">${item.title}</a></h3>
-                            <div class="article-date">📅 ${new Date(item.pubDate).toLocaleDateString('id-ID')}</div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            if (hasError && main.innerHTML === '') {
-                main.innerHTML = `
-                    <div class="error-box">
-                        <h3>Oops! Koneksi ke server berita terputus.</h3>
-                        <p>Terlalu banyak permintaan. Silakan coba lagi dalam beberapa menit.</p>
-                        <button class="btn-reload" onclick="location.reload()">Coba Lagi</button>
-                    </div>`;
+                loading.classList.add('hidden');
+                displayJobs(data.jobs);
+            } catch (error) {
+                loading.classList.add('hidden');
+                resultsDiv.innerHTML = `<p class="text-red-500 text-center">Error connecting to API. You might need to enable the CORS proxy.</p>`;
             }
         }
 
-        window.onload = init;
+        function displayJobs(jobs) {
+            const resultsDiv = document.getElementById('results');
+            if(!jobs || jobs.length === 0) {
+                resultsDiv.innerHTML = '<p class="text-center">No jobs found. Try different keywords.</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = jobs.map(job => `
+                <div class="bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-blue-600 group-hover:underline"><a href="${job.url}" target="_blank">${job.title}</a></h3>
+                            <p class="text-gray-900 font-semibold mt-1">${job.company}</p>
+                            <p class="text-gray-500 text-sm flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                                ${job.locations}
+                            </p>
+                        </div>
+                        <a href="${job.url}" target="_blank" class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-600 hover:text-white transition">View Job</a>
+                    </div>
+                    <div class="mt-4 text-gray-600 text-sm line-clamp-3">
+                        ${job.description}
+                    </div>
+                    <div class="mt-4 pt-4 border-t text-xs text-gray-400 flex justify-between">
+                        <span>Posted: ${job.date}</span>
+                        <span>via Careerjet</span>
+                    </div>
+                </div>
+            `).join('');
+        }
     </script>
 </body>
 </html>
